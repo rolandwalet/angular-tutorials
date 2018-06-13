@@ -1,0 +1,17 @@
+<html ng-app="third">
+  <script src="angular.js"></script>
+  <script>
+    var m = angular.module("third", []);
+    m.controller("ctrl", function($scope){
+      var rec = { regno:12,
+                  name:"Roland",
+                  address:"Manchester"};
+      $scope.record=rec;
+    });
+  </script>
+  <div ng-controller="ctrl">
+    Record: {{record.regno}}<br />
+    Name:   {{record.name}}<br />
+    City:   {{record.address}}
+  </div>
+</html>

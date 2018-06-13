@@ -1,0 +1,124 @@
+<html ng-app="tax2">
+<script src="angular.js"></script>
+<script>
+  var m = angular.module("tax2", []);
+  var createRecords = function($scope){
+    var rec = [
+      {name: "Nick", age:69, gender:"M", salary: 1620.69},
+      {name: "Roland", age:24, gender:"M", salary: 2000},
+      {name: "Liam", age:30, gender:"F", salary:1800},
+      {name: "Jorge", age:29, gender:"F", salary:1900},
+      {name: "Rob", age:31, gender:"M", salary:100}
+    ];
+    $scope.records=rec;
+  };
+  m.controller("ctrl", createRecords);
+  m.filter("showAnnualSalary", function(){
+    return function(s){
+      return s*12;
+    };
+  });
+  m.filter("showGender", function(){
+    return function(g){
+      switch(g){
+        case "M":
+          return "Male";
+          break;
+        case "F":
+          return "Female";
+          break;
+        default:
+          return "Unknown";
+      }
+    }
+  });
+  m.filter("showTax", function(){
+    return function(s,a,g){
+      var t=0;
+      var as=s*12;
+      if (a>=30){
+        if (as>=10000 && as<20000) {
+          t=as*0.15;
+        } else if(as>=20000 && as<30000){
+          t=as*0.19;
+        } else if(as>=30000 && as<40000){
+          t=as*0.21;
+        } else if(as>=40000){
+          t=as*0.36;
+        }
+        if (g=="F" && t>573){
+          t=573;
+        }
+      }
+      return t;
+    }
+  });
+</script>
+<style>
+  table {
+    border-collapse: collapse;
+    border: 1px solid black;
+  }
+  td {
+    border-left: 1px solid black;
+  }
+  th {
+    border: 1px solid black;
+    background-color: white;
+  }
+  tr:nth-child(even) {
+    background-color: #f49898;
+  }
+  tr:nth-child(odd) {
+    background-color: #98b5f4;
+  }
+</style>
+<table ng-controller="ctrl">
+  <tr>
+    <th>
+      Name
+    </th>
+    <th>
+      Age
+    </th>
+    <th>
+      Gender
+    </th>
+    <th>
+      Monthly Salary
+    </th>
+    <th>
+      Annual Salary
+    </th>
+    <th>
+      Tax
+    </th>
+    <th>
+      Net Salary
+    </th>
+  </tr>
+  <tr ng-repeat="r in records">
+    <td>
+      {{r.name}}
+    </td>
+    <td>
+      {{r.age}}
+    </td>
+    <td>
+      {{r.gender | showGender}}
+    </td>
+    <td>
+      £{{r.salary | number:2}}
+    </td>
+    <td>
+      £{{r.salary | showAnnualSalary | number:2}}
+    </td>
+    <td>
+      £{{r.salary | showTax:r.age:r.gender | number:2}}
+    </td>
+    <td>
+      £{{(r.salary | showAnnualSalary)-(r.salary | showTax:r.age:r.gender) | number:2}}
+    </td>
+  </tr>
+</table>
+</html>

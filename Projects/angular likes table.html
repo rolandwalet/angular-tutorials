@@ -1,0 +1,79 @@
+<html ng-app="likes">
+<script src="angular.js"></script>
+<script>
+  var m = angular.module("likes", []);
+  var createRecords = function($scope) {
+    rec = [
+      {lang:"Java", likes:0, dislikes:0},
+      {lang:"C++", likes:0, dislikes:0},
+      {lang:"PHP", likes:0, dislikes:0},
+      {lang:"Python", likes:0, dislikes:0}
+    ];
+    $scope.records=rec;
+    $scope.incrementLikes=function(x){
+      x.likes++;
+    }
+    $scope.incrementDislikes=function(x){
+      x.dislikes++;
+    }
+  }
+  m.controller("ctrl", createRecords);
+
+  m.filter("result", function(){
+    return function(L){
+      if (L.likes>L.dislikes) return "More Likes";
+      else if (L.likes<L.dislikes) return "More Dislikes";
+      else return "***";
+    }
+  });
+</script>
+<style>
+  table {
+    border-collapse: collapse;
+    border: 1px solid black;
+  }
+  table td {
+    text-align:center;
+    border-left: 1px solid black;
+  }
+  table th {
+    border: 1px solid black;
+  }
+</style>
+<table ng-controller="ctrl">
+  <tr>
+    <th>
+      Language
+    </th>
+    <th>
+      Likes
+    </th>
+    <th>
+      Dislikes
+    </th>
+    <th>
+      Result
+    </th>
+    <th>
+    </th>
+  </tr>
+  <tr ng-repeat="r in records">
+    <td>
+      {{r.lang}}
+    </td>
+    <td>
+      {{r.likes}}
+    </td>
+    <td>
+      {{r.dislikes}}
+    </td>
+    <td>
+      {{r | result}}
+    </td>
+    <td>
+      <input type="button" value = "Like" ng-click="incrementLikes(r)" />
+      <input type="button" value = "Dislike" ng-click="incrementDislikes(r)" />
+    </td>
+  </tr>
+</table>
+</html>

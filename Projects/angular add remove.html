@@ -1,0 +1,116 @@
+<html ng-app="list">
+<script src="angular.js"></script>
+<script>
+  var m = angular.module("list", []);
+  var createRecords = function($scope){
+    var rec = [
+      {id:1, name:"Roland", age:24, city:"Manchester", editmode:false},
+      {id:2, name:"Nick", age:25, city:"Timbuktu", editmode:false},
+      {id:3, name:"George", age:25, city:"Southampton", editmode:false},
+    ];
+    $scope.records=rec;
+    $scope.newRecord=function() {
+      $scope.records.push({
+        id:"", name:"", age:"", city:"", editmode:true
+      });
+    }
+    $scope.edit=function(x){
+      x.editmode = true;
+    }
+    $scope.save=function(x){
+      if (x.id!="" && x.name!="" && x.age!="" && x.city!=""){
+        x.editmode = false;
+      } else {
+        window.alert("Cannot leave blank fields!")
+      }
+    }
+    $scope.delete=function(x){
+      $scope.records.splice($scope.records.indexOf(x), 1);
+    }
+  }
+  m.controller("ctrl", createRecords);
+</script>
+<style>
+  table {
+    border-collapse: collapse;
+    border: 1px solid black;
+  }
+  table td {
+    border-left: 1px solid black;
+  }
+  table th {
+    border: 1px solid black;
+  }
+  .button {
+    width:60px;
+  }
+  .button:focus {
+    outline: none;
+  }
+  .editbutton {
+    background-color: white;
+    border: 1px solid;
+    color: #5687f5;
+    border-color: #5687f5
+  }
+  .editbutton:hover {
+    background-color: #5687f5;
+    color: white;
+  }
+  .editbutton:active {
+    background-color: #2e5ecb;
+    border-color: #2e5ecb;
+    color: white;
+  }
+  .textinput {
+    width:100px;
+  }
+  .numberinput{
+    width:30px;
+  }
+</style>
+<div ng-controller="ctrl">
+  <input type="button" value="New Record" ng-click="newRecord()"/><br /><br />
+<table>
+  <tr>
+    <th style="width:32px">
+      ID
+    </th>
+    <th style="width:102px">
+      Name
+    </th>
+    <th style="width:32px">
+      Age
+    </th>
+    <th style="width:102px">
+      City
+    </th>
+    <th>
+    </th>
+  </tr>
+  <tr ng-repeat="r in records">
+    <td>
+      <span ng-if="!r.editmode">{{r.id}}</span>
+      <input ng-model="r.id" ng-if="r.editmode" class="numberinput"/>
+    </td>
+    <td>
+      <span ng-if="!r.editmode">{{r.name}}</span>
+      <input ng-model="r.name" ng-if="r.editmode" class="textinput"/>
+    </td>
+    <td>
+      <span ng-if="!r.editmode">{{r.age}}</span>
+      <input ng-model="r.age" ng-if="r.editmode" class="numberinput"/>
+    </td>
+    <td>
+      <span ng-if="!r.editmode">{{r.city}}</span>
+      <input ng-model="r.city" ng-if="r.editmode" class="textinput"/>
+    </td>
+    <td>
+      <input ng-if="!r.editmode" type="button" value="Edit" class="button editbutton" ng-click="edit(r)"/>
+      <input ng-if="r.editmode" type="button" value="Save" class="button" ng-click="save(r)"/>
+      <input type="button" value="Delete" class="button" ng-click="delete(r)"/>
+    </td>
+  </tr>
+</table>
+</div>
+</html>

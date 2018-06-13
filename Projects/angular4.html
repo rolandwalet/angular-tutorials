@@ -1,0 +1,18 @@
+<html ng-app="fourth">
+  <script src="angular.js"></script>
+  <script>
+    var m = angular.module("fourth", []);
+    m.controller("ctrl", function($scope){
+      var rec = {regno:12, name:"Roland", marks:90};
+      $scope.record=rec;
+    });
+  </script>
+  <div ng-controller="ctrl">
+    Name: {{record.name}} <br />
+    Mark: {{record.marks}} <br />
+    Percentage: {{record.marks*100/150}}% <br /><br />
+    <b ng-if="record.marks>=90">Pass</b>
+    <b ng-if="record.marks<90">Fail</b>
+  </div>
+
+</html>

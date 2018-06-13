@@ -1,0 +1,156 @@
+<html ng-app="checkbox">
+<script src="angular.js"></script>
+<script>
+  var m = angular.module("checkbox", []);
+  var createRecords = function($scope){
+    var rec = [
+      {name: "Nick", salary: 6969},
+      {name: "Roland", salary: 39999.99},
+      {name: "Liam", salary:18000},
+      {name: "Jorge", salary:31000},
+      {name: "Rob", salary:100}
+    ];
+    $scope.records=rec;
+    $scope.showName = true;
+    $scope.maskName = false;
+    $scope.showSalary = true;
+    $scope.maskSalary = false;
+    $scope.showTax = true;
+    $scope.maskTax = false;
+    $scope.showNetSalary = true;
+    $scope.maskNetSalary = false;
+  };
+  m.controller("ctrl", createRecords);
+  m.filter("filterTax", function(){
+    return function(x){
+      if (x<10000) return 0;
+      else if (x>=10000 && x<20000){
+        return x*0.15;
+      } else if (x>=20000 && x<30000){
+        return x*0.19;
+      } else if (x>=30000 && x<40000){
+        return x*0.21;
+      } else return x*0.36;
+    }
+  });
+  m.filter("filterNetSalary", function(){
+    return function(x){
+      if (x<10000) return x;
+      else if (x>=10000 && x<20000){
+        return x-(x*0.15);
+      } else if (x>=20000 && x<30000){
+        return x-(x*0.19);
+      } else if (x>=30000 && x<40000){
+        return x-(x*0.21);
+      } else return x-(x*0.36);
+    }
+  });
+</script>
+<style>
+  table {
+    border-collapse: collapse;
+    border: 1px solid black;
+  }
+  table td {
+    text-align:center;
+    border-left: 1px solid black;
+  }
+  table th {
+    border: 1px solid black;
+  }
+</style>
+<div ng-controller="ctrl">
+<table>
+  <tr>
+    <th>
+      Column
+    </th>
+    <th>
+      Show
+    </th>
+    <th>
+      Mask
+    </th>
+  </tr>
+  <tr>
+    <td>
+      Name
+    </td>
+    <td>
+      <input type="checkbox" ng-model="showName" />
+    </td>
+    <td>
+      <input type="checkbox" ng-model="maskName" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Salary
+    </td>
+    <td>
+      <input type="checkbox" ng-model="showSalary" />
+    </td>
+    <td>
+      <input type="checkbox" ng-model="maskSalary" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Tax
+    </td>
+    <td>
+      <input type="checkbox" ng-model="showTax" />
+    </td>
+    <td>
+      <input type="checkbox" ng-model="maskTax" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Net Salary
+    </td>
+    <td>
+      <input type="checkbox" ng-model="showNetSalary" />
+    </td>
+    <td>
+      <input type="checkbox" ng-model="maskNetSalary" />
+    </td>
+  </tr>
+</table>
+<br />
+<table>
+  <tr>
+    <th ng-show="showName">
+      Name
+    </th>
+    <th ng-show="showSalary">
+      Salary
+    </th>
+    <th ng-show="showTax">
+      Tax
+    </th>
+    <th ng-show="showNetSalary">
+      Net Salary
+    </th>
+  </tr>
+  <tr ng-repeat="r in records">
+    <td ng-show="showName">
+      <span ng-if="!maskName">{{r.name}}</span>
+      <span ng-if="maskName">***</span>
+    </td>
+    <td ng-show="showSalary">
+      <span ng-if="!maskSalary">£{{r.salary | number:2}}</span>
+      <span ng-if="maskSalary">***</span>
+    </td>
+    <td ng-show="showTax">
+      <span ng-if="!maskTax">£{{r.salary | filterTax | number:2}}</span>
+      <span ng-if="maskTax">***</span>
+    </td>
+    <td ng-show="showNetSalary">
+      <span ng-if="!maskNetSalary">£{{r.salary | filterNetSalary | number:2}}</span>
+      <span ng-if="maskNetSalary">***</span>
+    </td>
+  </tr>
+</table>
+</div>
+</html>

@@ -1,0 +1,98 @@
+<html ng-app="taxes">
+<script src="angular.js"></script>
+<script>
+  var m=angular.module("taxes", []);
+  var createRecords = function($scope){
+    var rec = [{name: "Roland", age:24, salary:6969},
+               {name: "Nick", age:69, salary:69.69},
+               {name: "George", age:25, salary:2000}];
+    $scope.records=rec;
+  }
+  m.controller("ctrl", createRecords);
+  m.filter("showAnnualSalary", function(){
+    return function(x){
+      return x*12;
+    }
+  });
+  m.filter("showTax", function(){
+    return function(x){
+      var salary=x*12;
+      if (salary<10000) return 0;
+      else if (salary>=10000 && salary<20000){
+        return salary*0.15;
+      } else if (salary>=20000 && salary<30000){
+        return salary*0.19;
+      } else if (salary>=30000 && salary<40000){
+        return salary*0.21;
+      } else return salary*0.36;
+    }
+  });
+  m.filter("showNetSalary", function(){
+    return function(x){
+      var salary=x*12;
+      if (salary<10000) return salary;
+      else if (salary>=10000 && salary<20000){
+        return salary-(salary*0.15);
+      } else if (salary>=20000 && salary<30000){
+        return salary-(salary*0.19);
+      } else if (salary>=30000 && salary<40000){
+        return salary-(salary*0.21);
+      } else return salary-(salary*0.36);
+    }
+  });
+</script>
+<style>
+  table {
+    border-collapse: collapse;
+    border: 1px solid black;
+  }
+  table td {
+    border-left: 1px solid black;
+  }
+  table th {
+    border: 1px solid black;
+  }
+</style>
+<table ng-controller="ctrl">
+  <tr>
+    <th>
+      Name
+    </th>
+    <th>
+      Age
+    </th>
+    <th>
+      Monthly Salary
+    </th>
+    <th>
+      Annual Salary
+    </th>
+    <th>
+      Tax
+    </th>
+    <th>
+      Net Salary
+    </th>
+  </tr>
+  <tr ng-repeat="r in records">
+    <td>
+      {{r.name}}
+    </td>
+    <td>
+      {{r.age}}
+    </td>
+    <td>
+      £{{r.salary | number:2}}
+    </td>
+    <td>
+      £{{r.salary | showAnnualSalary | number:2}}
+    </td>
+    <td>
+      £{{r.salary | showTax | number:2}}
+    </td>
+    <td>
+      £{{r.salary | showNetSalary | number:2}}
+    </td>
+  </tr>
+</table>
+</html>

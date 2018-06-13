@@ -1,0 +1,75 @@
+<html ng-app="table">
+  <script src="angular.js"></script>
+  <script>
+    var m = angular.module("table", []);
+    m.controller("ctrl", function($scope){
+      var records=[{name: "Nick", country:"UK"},
+                   {name: "Roland", country:"Netherlands"},
+                   {name: "George", country:"Spain"},
+                   {name: "Liam", country:"Brazil"}];
+      $scope.data=records;
+      $scope.field='name';
+      $scope.order=false;
+      $scope.click=function(x){
+        if ($scope.field==x){
+          $scope.order = !$scope.order;
+        } else {
+          $scope.field = x;
+          $scope.order = false;
+        }
+      };
+    });
+  </script>
+  <style>
+		table {
+      border-collapse: collapse;
+  		border: 1px solid black;
+		}
+		table td {
+      text-align:center;
+      border-left: 1px solid black;
+		}
+    table th {
+    		border: 1px solid black;
+        cursor: pointer;
+        width: 100px;
+        height: 30px;
+    }
+    img {
+
+    }
+  </style>
+  <table ng-controller="ctrl">
+    <tr>
+      <th ng-click="click('name')">
+        <span>Name</span>
+        <span ng-if="field=='name' && order==false">&#9662;</span>
+        <span ng-if="field=='name' && order==true">&#9652;</span>
+      </th>
+      <th ng-click="click('country')">
+        <span>Country</span>
+        <span ng-if="field=='country' && order==false">&#9662;</span>
+        <span ng-if="field=='country' && order==true">&#9652;</span>
+      </th>
+      <td style="border-bottom: 1px solid black;">
+        <b>Flag</b>
+      </td>
+    </tr>
+    <tr ng-repeat="d in data | orderBy:field:order">
+      <td>
+        {{d.name}}
+      </td>
+      <td>
+        {{d.country}}
+      </td>
+      <td>
+        <span ng-switch on="d.country">
+          <img ng-switch-when="Netherlands" src="netherlands.png" />
+          <img ng-switch-when="UK" src="uk.png" />
+          <img ng-switch-when="Spain" src="spain.png" />
+          <img ng-switch-when="Brazil" src="brazil.png" />
+        </span>
+      </td>
+    </tr>
+  </table>
+</html>

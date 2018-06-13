@@ -1,0 +1,83 @@
+<html ng-app="table">
+  <script src="angular.js"></script>
+  <script>
+    var m = angular.module("table", []);
+    m.controller("ctrl", function($scope){
+      var records=[{regno:1, name: "Nick", marks:50},
+                   {regno:2, name: "Roland", marks:60},
+                   {regno:3, name: "George", marks:55}];
+      $scope.data=records;
+      $scope.field='regno';
+      $scope.order=false;
+      $scope.click=function(x){
+        if ($scope.field==x){
+          $scope.order = !$scope.order;
+        } else {
+          $scope.field = x;
+          $scope.order = false;
+        }
+      };
+    });
+  </script>
+  <style>
+		table {
+      border-collapse: collapse;
+  		border: 1px solid black;
+		}
+		table td {
+      text-align:center;
+      border-left: 1px solid black;
+		}
+    table th {
+    	border: 1px solid black;
+      cursor: pointer;
+    }
+  </style>
+  Search: <input ng-model="srch" />
+  <table ng-controller="ctrl">
+    <tr>
+      <th>
+        <span ng-click="click('regno')">Reg. No.</span>
+        <span ng-if="field=='regno' && order==false">&#9662;</span>
+        <span ng-if="field=='regno' && order==true">&#9652;</span>
+        <br />
+        <input ng-model="srch.regno"
+      </th>
+      <th>
+        <span ng-click="click('name')">Name</span>
+        <span ng-if="field=='name' && order==false">&#9662;</span>
+        <span ng-if="field=='name' && order==true">&#9652;</span>
+        <br />
+        <input ng-model="srch.name"
+      </th>
+      <th>
+        <span ng-click="click('marks')">Marks</span>
+        <span ng-if="field=='marks' && order==false">&#9662;</span>
+        <span ng-if="field=='marks' && order==true">&#9652;</span>
+        <br />
+        <input ng-model="srch.marks"
+      </th>
+      <th>
+        <span ng-click="click('marks')">Result</span>
+        <span ng-if="field=='marks' && order==false">&#9662;</span>
+        <span ng-if="field=='marks' && order==true">&#9652;</span>
+        <br />
+      </th>
+    </tr>
+    <tr ng-repeat="d in data | orderBy:field:order | filter:srch">
+      <td>
+        {{d.regno}}
+      </td>
+      <td>
+        {{d.name}}
+      </td>
+      <td>
+        {{d.marks}}
+      </td>
+      <td>
+        <b style="color:green" ng-if="d.marks>=55">Pass</b>
+        <b style="color:red" ng-if="d.marks<55">Fail</b>
+      </td>
+    </tr>
+  </table>
+</html>

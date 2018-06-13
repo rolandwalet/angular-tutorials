@@ -1,0 +1,40 @@
+<html ng-app="filter">
+<script src="angular.js"></script>
+<script>
+  var createRecord = function($scope) {
+    var rec=[{name:"Nick", gender:"Z"},
+           {name:"Roland", gender:"M"},
+           {name:"George", gender:"F"}];
+    $scope.records=rec;
+  }
+  var m = angular.module("filter", []);
+  m.controller("ctrl", createRecord);
+  m.filter("showGender", function(){
+    return function(g){
+      if (g=="M") {
+        return "Male";
+      } else if (g=="F") {
+        return "Female";
+      } else return "Unknown";
+    }
+  })
+</script>
+<table ng-controller="ctrl">
+  <tr>
+    <th>
+      Name
+    </th>
+    <th>
+      Gender
+    </th>
+  </tr>
+  <tr ng-repeat="r in records">
+    <td>
+      {{r.name}}
+    </td>
+    <td>
+      {{r.gender | showGender}}
+    </td>
+  </tr>
+</table>
+</html>
